@@ -18,6 +18,7 @@ public class SQLiteBase implements SqlBase{
 
     public SQLiteBase(File file){
         url = "jdbc:sqlite:"+file;
+        this.file = file;
     }
 
     public Connection getConnection(){
@@ -54,8 +55,8 @@ public class SQLiteBase implements SqlBase{
                     PreparedStatement ps = bs.preparedStatement(this.getConnection());
                     ps.execute();
                     ps.close();
-                } catch (SQLException var4) {
-                    var4.printStackTrace();
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
             }
         }

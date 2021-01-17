@@ -2,5 +2,6 @@ name: Backpack
 version: 0.0.1
 main: com.dakuo.backpack.Backpack
 commands:
-  openbackpack:
+  backpack:
     description: backpack main commands
+    aliases: [bp]

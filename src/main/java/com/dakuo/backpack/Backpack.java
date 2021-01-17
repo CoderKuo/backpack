@@ -1,6 +1,7 @@
 package com.dakuo.backpack;
 
 import com.dakuo.backpack.command.commandHandler;
+import com.dakuo.backpack.database.BufferStatement;
 import com.dakuo.backpack.database.MysqlBase;
 import com.dakuo.backpack.database.SQLiteBase;
 import com.dakuo.backpack.database.SqlBase;
@@ -19,7 +20,8 @@ public final class Backpack extends JavaPlugin {
         plugin = this;
         outEnableMessage();
         yamlUtils.loadYamlData();
-        this.getCommand("openbackpack").setExecutor(new commandHandler());
+        this.getCommand("bp").setExecutor(new commandHandler());
+
         if(getConfig().getBoolean("database.mysql")){
             ConfigurationSection database = getConfig().getConfigurationSection("database");
             String host = database.getString("host");
@@ -29,8 +31,21 @@ public final class Backpack extends JavaPlugin {
             String password = database.getString("password");
             boolean usessl = database.getBoolean("usessl");
             sqlBase = new MysqlBase(host,user,password,database1,port,usessl);
+            getLogger().info("§a存储类型为Mysql");
         }else{
-            sqlBase = new SQLiteBase(new File(getDataFolder()+"/data.db"));
+            File data = new File(getDataFolder() + "/data.db");
+            sqlBase = new SQLiteBase(data);
+            getLogger().info("§a存储类型为SQLite");
+            if(!data.exists()){
+                sqlBase.queue(new BufferStatement("CREATE TABLE `backpack_data`  (\n" +
+                        "  `id` int(11) NOT NULL ,\n" +
+                        "  `player_uuid` varchar(255) NOT NULL,\n" +
+                        "  `level` int(11) NULL ,\n" +
+                        "  `content` text ,\n" +
+                        "  PRIMARY KEY (`id`) \n" +
+                        ") "));
+                sqlBase.flush();
+            }
         }
     }
 
