@@ -1,0 +1,6 @@
+name: Backpack
+version: 0.0.1
+main: com.dakuo.backpack.Backpack
+commands:
+  openbackpack:
+    description: backpack main commands

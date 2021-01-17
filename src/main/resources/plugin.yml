@@ -1,0 +1,6 @@
+name: Backpack
+version: ${project.version}
+main: com.dakuo.backpack.Backpack
+commands:
+  openbackpack:
+    description: backpack main commands

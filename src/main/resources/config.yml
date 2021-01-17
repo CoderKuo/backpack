@@ -1,0 +1,8 @@
+database:
+  mysql: false
+  host: localhost
+  port: 3306
+  database: backpack
+  user: root
+  password: password
+  usessl: false
