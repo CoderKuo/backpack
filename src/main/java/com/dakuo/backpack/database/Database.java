@@ -17,7 +17,7 @@ public class Database {
         this.base = sqlBase;
     }
 
-    public SqlBase getBase() {return base;}
+    public SqlBase getBase() { return base; }
 
     public Connection getConnection() {
         return this.base.getConnection();
