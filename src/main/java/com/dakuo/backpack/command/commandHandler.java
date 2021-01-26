@@ -3,11 +3,14 @@ package com.dakuo.backpack.command;
 import com.dakuo.backpack.Backpack;
 import com.dakuo.backpack.database.BufferStatement;
 import com.dakuo.backpack.inventory.menuInventory;
+import com.dakuo.backpack.service.BackPackService;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.sql.ResultSet;
 
 public class commandHandler implements CommandExecutor {
 
@@ -29,7 +32,19 @@ public class commandHandler implements CommandExecutor {
                     if(args.length == 3){
                         Player player = Bukkit.getPlayer(args[1]);
                         try {
-                            Backpack.sqlBase.queue(new BufferStatement("insert into backpack_data(id,backpackType,level) values (?,?,?)",args[2],0));
+
+
+                            BufferStatement bufferStatement = new BufferStatement("insert into backpack_data(backpackType,level) values (?,?)", args[0], 0);
+                            ResultSet generatedKeys = bufferStatement.preparedStatement(Backpack.sqlBase.getConnection()).getGeneratedKeys();
+                            Integer key = null;
+                            if(generatedKeys.next()){
+                                key = generatedKeys.getInt(1);
+                            }
+                            BackPackService backPackService = new BackPackService();
+                            String backPackData = backPackService.queryBackPackDataByPlayerUUID(player.getUniqueId().toString());
+                            String newBackPackData = BackPackService.addBackPackToOldBackPackData(backPackData, key);
+                            Backpack.sqlBase.queue(new BufferStatement("insert into backpack_player_data(player_uuid,backpacks) values (?,?)",player.getUniqueId().toString(),newBackPackData));
+
                             sender.sendMessage("§a§l成功给玩家"+player.getName()+"添加一个等级为0的"+args[2]+"背包!");
                         }catch (Exception e){
                             sender.sendMessage("§a§l数据库配置错误,请检查数据库配置,或根据控制台输出联系作者!");

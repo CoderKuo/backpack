@@ -1,6 +1,9 @@
 package com.dakuo.backpack.database;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public interface SqlBase {
     Connection getConnection();
@@ -9,6 +12,9 @@ public interface SqlBase {
 
     void flush();
 
-    void close();
+    void close(ResultSet rs, Statement ptmt, Connection conn);
+
+    void close(ResultSet rs, PreparedStatement ptmt, Connection conn);
+
 
 }

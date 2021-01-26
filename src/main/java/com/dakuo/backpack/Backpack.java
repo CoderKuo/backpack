@@ -6,6 +6,7 @@ import com.dakuo.backpack.database.MysqlBase;
 import com.dakuo.backpack.database.SQLiteBase;
 import com.dakuo.backpack.database.SqlBase;
 import com.dakuo.backpack.inventory.MenuInventoryMonitor;
+import com.dakuo.backpack.service.DataBaseService;
 import com.dakuo.backpack.service.version;
 import com.dakuo.backpack.utils.yamlUtils;
 
@@ -39,6 +40,7 @@ public final class Backpack extends JavaPlugin {
             boolean usessl = database.getBoolean("usessl");
             sqlBase = new MysqlBase(host, user, password, database1, port, usessl);
             getLogger().info("§a存储类型为Mysql");
+            hasTable();
         } else {
             File data = new File(getDataFolder() + "/data.db");
             sqlBase = new SQLiteBase(data);
@@ -55,6 +57,9 @@ public final class Backpack extends JavaPlugin {
                         "  `backpacks` varchar(255))"));
                 sqlBase.flush();
             }
+            hasTable();
+
+
         }
     }
 
@@ -63,9 +68,33 @@ public final class Backpack extends JavaPlugin {
 
     }
 
+    private void hasTable(){
+        DataBaseService dataBaseService = new DataBaseService(sqlBase);
+        boolean backpack_data = dataBaseService.hasTable("backpack_data");
+        boolean backpack_player_data = dataBaseService.hasTable("backpack_player_data");
+        if(sqlBase instanceof MysqlBase){
+            if(!backpack_data){
+                dataBaseService.createTableBase("backpack_data");
+            }
+            if(!backpack_player_data){
+                dataBaseService.createTableBase("backpack_player_data");
+            }
+        }else{
+            sqlBase.queue(new BufferStatement("CREATE TABLE IF NOT EXISTS `backpack_data`  (\n" +
+                    "  `id` integer NOT NULL primary key autoincrement,\n" +
+                    "  `backpackType` varchar(255) NOT NULL,\n" +
+                    "  `level` int(11) NULL ,\n" +
+                    "  `content` text \n" +
+                    ") "));
+            sqlBase.queue(new BufferStatement("CREATE TABLE IF NOT EXISTS `backpack_player_data`  (\n" +
+                    "  `player_uuid` varchar(255) NOT NULL,\n" +
+                    "  `backpacks` varchar(255))"));
+            sqlBase.flush();
+        }
+    }
+
 
     private void outEnableMessage() {
-
 
         System.out.println("§1==============================");
         System.out.println("");

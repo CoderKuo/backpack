@@ -3,10 +3,7 @@ package com.dakuo.backpack.database;
 import com.dakuo.backpack.Backpack;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.LinkedList;
 
 public class SQLiteBase implements SqlBase{
@@ -63,7 +60,44 @@ public class SQLiteBase implements SqlBase{
 
     }
 
-    public void close() {
+    //关闭连接
+    public void close(ResultSet rs,PreparedStatement ptmt,Connection conn){
+        try {
+            if(rs!=null)rs.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        try {
+            if(ptmt!=null)ptmt.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        try {
+            if(conn!=null)conn.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        this.flush();
+
+    }
+
+    //关闭连接
+    public void close(ResultSet rs, Statement ptmt, Connection conn){
+        try {
+            if(rs!=null)rs.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        try {
+            if(ptmt!=null)ptmt.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        try {
+            if(conn!=null)conn.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
         this.flush();
     }
 

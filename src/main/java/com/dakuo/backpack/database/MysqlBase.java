@@ -1,9 +1,6 @@
 package com.dakuo.backpack.database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -72,7 +69,42 @@ public class MysqlBase implements SqlBase{
     }
 
 
-    public void close() {
+    //关闭连接
+    public void close(ResultSet rs,PreparedStatement ptmt,Connection conn){
+        try {
+            if(rs!=null)rs.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        try {
+            if(ptmt!=null)ptmt.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        try {
+            if(conn!=null)conn.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    //关闭连接
+    public void close(ResultSet rs, Statement ptmt, Connection conn){
+        try {
+            if(rs!=null)rs.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        try {
+            if(ptmt!=null)ptmt.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        try {
+            if(conn!=null)conn.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
     public void flush() {
