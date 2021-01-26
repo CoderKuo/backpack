@@ -61,8 +61,7 @@ public final class Backpack extends JavaPlugin {
 
     private void outEnableMessage(){
 
-        String s = HttpUtil.get("https://github.com/dkinging/backpack/blob/master/version.yml");
-        System.out.println(s);
+        String s = HttpUtil.get("https://raw.githubusercontent.com/dkinging/backpack/master/version.yml");
 
         System.out.println("§1==============================");
         System.out.println("");
