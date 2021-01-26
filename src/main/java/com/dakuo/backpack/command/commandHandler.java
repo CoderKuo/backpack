@@ -28,13 +28,25 @@ public class commandHandler implements CommandExecutor {
                     }
                     if(args.length == 3){
                         Player player = Bukkit.getPlayer(args[1]);
-                        Backpack.sqlBase.queue(new BufferStatement("insert into backpack_data(id,player_uuid,level) values (?,?,?)",args[2],player.getUniqueId(),0));
-                        sender.sendMessage("§a§l成功给玩家"+player.getName()+"添加一个等级为0的"+args[2]+"背包!");
+                        try {
+                            Backpack.sqlBase.queue(new BufferStatement("insert into backpack_data(id,backpackType,level) values (?,?,?)",args[2],0));
+                            sender.sendMessage("§a§l成功给玩家"+player.getName()+"添加一个等级为0的"+args[2]+"背包!");
+                        }catch (Exception e){
+                            sender.sendMessage("§a§l数据库配置错误,请检查数据库配置,或根据控制台输出联系作者!");
+                            e.printStackTrace();
+                        }
+                        break;
                     }
                     if(args.length == 4){
                         Player player = Bukkit.getPlayer(args[1]);
-                        Backpack.sqlBase.queue(new BufferStatement("insert into backpack_data(id,player_uuid,level) values (?,?,?)",args[2],player.getUniqueId(),args[3]));
-                        sender.sendMessage("§a§l成功给玩家"+player.getName()+"添加一个等级为"+args[3]+"的"+args[2]+"背包!");
+                        try {
+                            Backpack.sqlBase.queue(new BufferStatement("insert into backpack_data(id,player_uuid,level) values (?,?,?)",args[2],player.getUniqueId(),args[3]));
+                            sender.sendMessage("§a§l成功给玩家"+player.getName()+"添加一个等级为"+args[3]+"的"+args[2]+"背包!");
+                        }catch (Exception e){
+                            sender.sendMessage("§a§l数据库配置错误,请检查数据库配置,或根据控制台输出联系作者!");
+                            e.printStackTrace();
+                        }
+                        break;
                     }
             }
         }

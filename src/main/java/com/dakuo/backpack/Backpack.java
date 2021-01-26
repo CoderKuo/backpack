@@ -5,6 +5,7 @@ import com.dakuo.backpack.database.BufferStatement;
 import com.dakuo.backpack.database.MysqlBase;
 import com.dakuo.backpack.database.SQLiteBase;
 import com.dakuo.backpack.database.SqlBase;
+import com.dakuo.backpack.inventory.MenuInventoryMonitor;
 import com.dakuo.backpack.utils.yamlUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
@@ -21,7 +22,7 @@ public final class Backpack extends JavaPlugin {
         outEnableMessage();
         yamlUtils.loadYamlData();
         this.getCommand("bp").setExecutor(new commandHandler());
-
+        getServer().getPluginManager().registerEvents(new MenuInventoryMonitor(),this);
         if(getConfig().getBoolean("database.mysql")){
             ConfigurationSection database = getConfig().getConfigurationSection("database");
             String host = database.getString("host");
@@ -38,12 +39,14 @@ public final class Backpack extends JavaPlugin {
             getLogger().info("§a存储类型为SQLite");
             if(!data.exists()){
                 sqlBase.queue(new BufferStatement("CREATE TABLE `backpack_data`  (\n" +
-                        "  `id` int(11) NOT NULL ,\n" +
-                        "  `player_uuid` varchar(255) NOT NULL,\n" +
+                        "  `id` integer NOT NULL primary key autoincrement,\n" +
+                        "  `backpackType` varchar(255) NOT NULL,\n" +
                         "  `level` int(11) NULL ,\n" +
-                        "  `content` text ,\n" +
-                        "  PRIMARY KEY (`id`) \n" +
+                        "  `content` text \n" +
                         ") "));
+                sqlBase.queue(new BufferStatement("CREATE TABLE `backpack_player_data`  (\n" +
+                        "  `player_uuid` varchar(255) NOT NULL,\n" +
+                        "  `backpacks` varchar(255))"));
                 sqlBase.flush();
             }
         }
