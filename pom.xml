@@ -83,5 +83,11 @@
             <version>3.32.3</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-http</artifactId>
+            <version>5.5.7</version>
+        </dependency>
+
     </dependencies>
 </project>

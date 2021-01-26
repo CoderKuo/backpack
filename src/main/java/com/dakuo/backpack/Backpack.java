@@ -1,5 +1,6 @@
 package com.dakuo.backpack;
 
+import cn.hutool.http.HttpUtil;
 import com.dakuo.backpack.command.commandHandler;
 import com.dakuo.backpack.database.BufferStatement;
 import com.dakuo.backpack.database.MysqlBase;
@@ -59,6 +60,10 @@ public final class Backpack extends JavaPlugin {
 
 
     private void outEnableMessage(){
+
+        String s = HttpUtil.get("https://github.com/dkinging/backpack/blob/master/version.yml");
+        System.out.println(s);
+
         System.out.println("§1==============================");
         System.out.println("");
         System.out.println("§a  Backpack启动成功！");
