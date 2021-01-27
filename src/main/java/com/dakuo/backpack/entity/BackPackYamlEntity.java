@@ -56,7 +56,7 @@ public class BackPackYamlEntity {
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", size=" + size +
-                ", level=" + level +
+                ", level=" + level.toJSONString() +
                 '}';
     }
 }
