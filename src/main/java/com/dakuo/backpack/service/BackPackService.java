@@ -19,6 +19,12 @@ public class BackPackService {
     }
 
 
+    /**
+     * 给玩家发送背包
+     * @param playerUUID 玩家UUID
+     * @param backpack 背包实例
+     * @return 返回
+     */
     public int givePlayerBackPack(String playerUUID, BackPackEntity backpack){
         BufferStatement bufferStatement = new BufferStatement("insert into `backpack_data` (`backpackType`,`level`) values (?,?)", backpack.getBackpackType(), backpack.getLevel());
         int id = -1;

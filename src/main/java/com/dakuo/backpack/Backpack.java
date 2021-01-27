@@ -1,6 +1,6 @@
 package com.dakuo.backpack;
 
-import com.dakuo.backpack.command.commandHandler;
+import com.dakuo.backpack.command.CommandHandler;
 import com.dakuo.backpack.database.BufferStatement;
 import com.dakuo.backpack.database.MysqlBase;
 import com.dakuo.backpack.database.SQLiteBase;
@@ -58,7 +58,7 @@ public final class Backpack extends JavaPlugin {
             }
             hasTable();
 
-            this.getCommand("bp").setExecutor(new commandHandler());
+            this.getCommand("bp").setExecutor(CommandHandler.getInstance());
             getServer().getPluginManager().registerEvents(new MenuInventoryMonitor(), this);
 
 
