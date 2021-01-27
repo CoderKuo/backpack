@@ -2,6 +2,7 @@ package com.dakuo.backpack.command;
 
 import com.dakuo.backpack.Backpack;
 import com.dakuo.backpack.database.BufferStatement;
+import com.dakuo.backpack.entity.BackPackEntity;
 import com.dakuo.backpack.inventory.menuInventory;
 import com.dakuo.backpack.service.BackPackService;
 import org.bukkit.Bukkit;
@@ -13,6 +14,11 @@ import org.bukkit.entity.Player;
 import java.sql.ResultSet;
 
 public class commandHandler implements CommandExecutor {
+
+    BackPackService backPackService;
+    public commandHandler(){
+        this.backPackService = new BackPackService();
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -32,20 +38,12 @@ public class commandHandler implements CommandExecutor {
                     if(args.length == 3){
                         Player player = Bukkit.getPlayer(args[1]);
                         try {
-
-
-                            BufferStatement bufferStatement = new BufferStatement("insert into backpack_data(backpackType,level) values (?,?)", args[0], 0);
-                            ResultSet generatedKeys = bufferStatement.preparedStatement(Backpack.sqlBase.getConnection()).getGeneratedKeys();
-                            Integer key = null;
-                            if(generatedKeys.next()){
-                                key = generatedKeys.getInt(1);
+                            int i = backPackService.givePlayerBackPack(player.getUniqueId().toString(), new BackPackEntity(args[2], 0));
+                            if(i!=-1){
+                                sender.sendMessage("§a§l成功给玩家"+player.getName()+"添加一个等级为0的"+args[2]+"背包!");
+                            }else{
+                                sender.sendMessage("§a§l未知错误");
                             }
-                            BackPackService backPackService = new BackPackService();
-                            String backPackData = backPackService.queryBackPackDataByPlayerUUID(player.getUniqueId().toString());
-                            String newBackPackData = BackPackService.addBackPackToOldBackPackData(backPackData, key);
-                            Backpack.sqlBase.queue(new BufferStatement("insert into backpack_player_data(player_uuid,backpacks) values (?,?)",player.getUniqueId().toString(),newBackPackData));
-
-                            sender.sendMessage("§a§l成功给玩家"+player.getName()+"添加一个等级为0的"+args[2]+"背包!");
                         }catch (Exception e){
                             sender.sendMessage("§a§l数据库配置错误,请检查数据库配置,或根据控制台输出联系作者!");
                             e.printStackTrace();
@@ -55,8 +53,12 @@ public class commandHandler implements CommandExecutor {
                     if(args.length == 4){
                         Player player = Bukkit.getPlayer(args[1]);
                         try {
-                            Backpack.sqlBase.queue(new BufferStatement("insert into backpack_data(id,player_uuid,level) values (?,?,?)",args[2],player.getUniqueId(),args[3]));
-                            sender.sendMessage("§a§l成功给玩家"+player.getName()+"添加一个等级为"+args[3]+"的"+args[2]+"背包!");
+                            int i = backPackService.givePlayerBackPack(player.getUniqueId().toString(), new BackPackEntity(args[2], Integer.parseInt(args[3])));
+                            if(i!=-1){
+                                sender.sendMessage("§a§l成功给玩家"+player.getName()+"添加一个等级为"+args[3]+"的"+args[2]+"背包!");
+                            }else{
+                                sender.sendMessage("§a§l未知错误");
+                            }
                         }catch (Exception e){
                             sender.sendMessage("§a§l数据库配置错误,请检查数据库配置,或根据控制台输出联系作者!");
                             e.printStackTrace();

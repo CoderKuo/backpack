@@ -28,8 +28,7 @@ public final class Backpack extends JavaPlugin {
         plugin = this;
         outEnableMessage();
         yamlUtils.loadYamlData();
-        this.getCommand("bp").setExecutor(new commandHandler());
-        getServer().getPluginManager().registerEvents(new MenuInventoryMonitor(), this);
+
         if (getConfig().getBoolean("database.mysql")) {
             ConfigurationSection database = getConfig().getConfigurationSection("database");
             String host = database.getString("host");
@@ -58,6 +57,9 @@ public final class Backpack extends JavaPlugin {
                 sqlBase.flush();
             }
             hasTable();
+
+            this.getCommand("bp").setExecutor(new commandHandler());
+            getServer().getPluginManager().registerEvents(new MenuInventoryMonitor(), this);
 
 
         }
