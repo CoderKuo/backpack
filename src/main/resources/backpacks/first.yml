@@ -1,5 +1,6 @@
 name: '一号背包'
-description: '免费获得的背包'
+description:
+  - '免费获得的背包'
 size: 5
 #permission: ''
 level:

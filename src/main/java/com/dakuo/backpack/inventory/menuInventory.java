@@ -1,5 +1,6 @@
 package com.dakuo.backpack.inventory;
 
+import com.dakuo.backpack.service.InventoryService;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -9,9 +10,17 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class menuInventory {
+
+    InventoryService inventoryService;
+
+    public menuInventory(){
+        inventoryService = InventoryService.getInstance();
+    }
+
     public void OpenInventory(Player player){
         Inventory inventory = Bukkit.createInventory(new MyHolder(), 54, "§8§l背包仓库");
         Map<Integer, ItemStack> itemStackBk = getItemStackBk();
@@ -19,7 +28,10 @@ public class menuInventory {
             inventory.setItem(integer,itemStackBk.get(integer));
         }
 
-
+        List<ItemStack> itemStacks = inventoryService.showBackItemStacks(player.getUniqueId().toString());
+        for (ItemStack itemStack : itemStacks) {
+            inventory.setItem(inventory.firstEmpty(),itemStack);
+        }
 
         player.openInventory(inventory);
     }

@@ -2,20 +2,32 @@ package com.dakuo.backpack.entity;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.List;
+
 public class BackPackYamlEntity {
     String name;
-    String description;
+    List<String> description;
     int size;
+    JSONObject material;
     JSONObject level;
 
     public BackPackYamlEntity() {
     }
 
-    public BackPackYamlEntity(String name, String description, int size, JSONObject level) {
+    public BackPackYamlEntity(String name, List<String> description, int size,JSONObject material, JSONObject level) {
         this.name = name;
         this.description = description;
         this.size = size;
         this.level = level;
+        this.material = material;
+    }
+
+    public JSONObject getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(JSONObject material) {
+        this.material = material;
     }
 
     public String getName() {
@@ -26,11 +38,11 @@ public class BackPackYamlEntity {
         this.name = name;
     }
 
-    public String getDescription() {
+    public List<String> getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(List<String> description) {
         this.description = description;
     }
 
@@ -56,6 +68,7 @@ public class BackPackYamlEntity {
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", size=" + size +
+                ", material='" + material.toJSONString() + '\'' +
                 ", level=" + level.toJSONString() +
                 '}';
     }

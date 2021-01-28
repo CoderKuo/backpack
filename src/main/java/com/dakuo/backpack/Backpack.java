@@ -10,6 +10,7 @@ import com.dakuo.backpack.service.DataBaseService;
 import com.dakuo.backpack.service.version;
 import com.dakuo.backpack.utils.yamlUtils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,16 +19,21 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class Backpack extends JavaPlugin {
     public static Plugin plugin;
     public static SqlBase sqlBase;
+    public static Integer serverVersion;
 
     @Override
     public void onEnable() {
         plugin = this;
         outEnableMessage();
-        yamlUtils.loadYamlData();
+        yamlUtils.getInstance().loadYamlData();
+
+        serverVersion = getVersionId();
 
         if (getConfig().getBoolean("database.mysql")) {
             ConfigurationSection database = getConfig().getConfigurationSection("database");
@@ -115,5 +121,16 @@ public final class Backpack extends JavaPlugin {
             }
         }.runTaskAsynchronously(this);
 
+    }
+
+    private Integer getVersionId(){
+        String s = Bukkit.getServer().getClass().getPackage().getName().replace("org.bukkit.craftbukkit.","");
+        String regex="(_).*?(_)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(s);
+        if(matcher.find()){
+            return Integer.parseInt(matcher.group(0).replace("_",""));
+        }
+        return null;
     }
 }
