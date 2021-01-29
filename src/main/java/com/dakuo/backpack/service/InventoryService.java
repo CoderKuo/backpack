@@ -31,23 +31,28 @@ public class InventoryService {
         return instance;
     }
 
-    public List<ItemStack> showBackItemStacks(String UUID){
-        List<BackPackEntity> BackPackList = getBackPackListByPlayerUUID(UUID);
+//    public List<ItemStack> showBackPackContent(String backpack,String uuid,int index){
+//
+//    }
+
+    public List<ItemStack> showBackItemStacks(List<BackPackEntity> BackPackList){
         List<ItemStack> itemStacks = new ArrayList<>();
         Integer serverVersion = Backpack.serverVersion;
         for (BackPackEntity backPackEntity : BackPackList) {
             BackPackYamlEntity backPackYamlEntity = yamlDao.BackPackYamlMap.get(backPackEntity.backpackType);
             JSONObject material = backPackYamlEntity.getMaterial();
-            JSONObject material1 = material.getJSONObject("Material");
-            ItemStack itemStack = null;
-            if(serverVersion > 12){
-                String name = material1.getString("name");
-                Boolean enchantment = material1.getBoolean("enchantment");
-                itemStack = getItemStack(name, enchantment);
-            }else{
-                Integer id = material1.getInteger("id");
-                Boolean enchantment = material1.getBoolean("enchantment");
-                itemStack = getItemStack(id,enchantment);
+            ItemStack itemStack = new ItemStack(Material.CHEST);
+            if(material != null){
+                JSONObject material1 = material.getJSONObject("Material");
+                if(serverVersion > 12){
+                    String name = material1.getString("name");
+                    Boolean enchantment = material.getBoolean("enchantment");
+                    itemStack = getItemStack(name, enchantment);
+                }else{
+                    Integer id = material1.getInteger("id");
+                    Boolean enchantment = material.getBoolean("enchantment");
+                    itemStack = getItemStack(id,enchantment);
+                }
             }
             ItemMeta itemMeta = itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType());
             itemMeta.setDisplayName(backPackYamlEntity.getName());

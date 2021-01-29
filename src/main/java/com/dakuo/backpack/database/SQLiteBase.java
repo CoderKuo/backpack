@@ -9,9 +9,9 @@ import java.util.LinkedList;
 public class SQLiteBase implements SqlBase{
 
     private String url;
-    private volatile LinkedList<BufferStatement> queue = new LinkedList();
+    private final LinkedList<BufferStatement> queue = new LinkedList();
     private volatile Thread watcher;
-    private File file;
+    private final File file;
 
     public SQLiteBase(File file){
         url = "jdbc:sqlite:"+file;
@@ -44,7 +44,7 @@ public class SQLiteBase implements SqlBase{
         while(!this.queue.isEmpty()) {
             BufferStatement bs;
             synchronized(this.queue) {
-                bs = (BufferStatement)this.queue.removeFirst();
+                bs = this.queue.removeFirst();
             }
 
             synchronized(this.file) {

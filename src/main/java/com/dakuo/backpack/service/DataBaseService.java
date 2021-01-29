@@ -60,5 +60,6 @@ public class DataBaseService {
                     "  `player_uuid` varchar(255) NOT NULL primary key,\n" +
                     "  `backpacks` varchar(255))"));
         }
+        sqlBase.flush();
     }
 }

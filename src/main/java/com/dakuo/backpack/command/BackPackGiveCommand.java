@@ -1,6 +1,7 @@
 package com.dakuo.backpack.command;
 
 import com.dakuo.backpack.entity.BackPackEntity;
+import com.dakuo.backpack.utils.yamlDao;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -24,6 +25,11 @@ public class BackPackGiveCommand {
             return;
         }
         if(args.length == 3){
+            if(!yamlDao.BackPackYamlMap.containsKey(args[2])){
+                sender.sendMessage("§c>>>没有找到该背包!");
+                return;
+            }
+
             Player player = Bukkit.getPlayer(args[1]);
             try {
                 int i = commandHandler.backPackService.givePlayerBackPack(player.getUniqueId().toString(), new BackPackEntity(args[2], 0));
@@ -39,6 +45,10 @@ public class BackPackGiveCommand {
             return;
         }
         if(args.length == 4){
+            if(!yamlDao.BackPackYamlMap.containsKey(args[2])){
+                sender.sendMessage("§c>>>没有找到该背包!");
+                return;
+            }
             Player player = Bukkit.getPlayer(args[1]);
             try {
                 int i = commandHandler.backPackService.givePlayerBackPack(player.getUniqueId().toString(), new BackPackEntity(args[2], Integer.parseInt(args[3])));

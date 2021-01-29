@@ -8,11 +8,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class MyHolder implements InventoryHolder,ThisInventoryHolder {
-    private static Map<Integer, ItemStack> itemStackBk = new HashMap<>();
+public class MyHolder implements InventoryHolder {
+     int index;
 
-    public Map<Integer,ItemStack> getItemStackBk() { return itemStackBk; }
+    public int getIndex() {
+        return index;
+    }
 
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
     @Override
     public Inventory getInventory() {

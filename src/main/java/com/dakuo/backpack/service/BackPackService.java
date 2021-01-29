@@ -26,7 +26,6 @@ public class BackPackService {
      * @return 返回
      */
     public int givePlayerBackPack(String playerUUID, BackPackEntity backpack){
-        BufferStatement bufferStatement = new BufferStatement("insert into `backpack_data` (`backpackType`,`level`) values (?,?)", backpack.getBackpackType(), backpack.getLevel());
         int id = -1;
         int result = -1;
         PreparedStatement ps = null;
@@ -35,8 +34,9 @@ public class BackPackService {
         try {
 
             connection = sqlBase.getConnection();
-
-            ps = bufferStatement.preparedStatement(connection);
+            ps = connection.prepareStatement("insert into `backpack_data` (`backpackType`,`level`) values (?,?)");
+            ps.setString(1,backpack.getBackpackType());
+            ps.setInt(2,backpack.getLevel());
             result = ps.executeUpdate();
             rs = ps.getGeneratedKeys();
             if(rs.next()){
@@ -45,10 +45,9 @@ public class BackPackService {
             String playerBackPackData = queryBackPackDataByPlayerUUID(playerUUID);
             String insertedBackPackData = addBackPackToOldBackPackData(playerBackPackData, id);
             if(playerBackPackData == null){
-                sqlBase.queue(new BufferStatement("insert into `backpack_player_data` values(?,?)",playerUUID,insertedBackPackData));
-
+                connection.createStatement().executeUpdate("insert into `backpack_player_data` values("+playerUUID+","+insertedBackPackData+")");
             }else{
-                sqlBase.queue(new BufferStatement("update `backpack_player_data` set backpacks = ? where player_uuid = ?",insertedBackPackData,playerUUID));
+                connection.createStatement().executeUpdate("update `backpack_player_data` set backpacks = \'"+insertedBackPackData+"\' where player_uuid = \'"+playerUUID+"\'");
             }
 
             return result;
@@ -70,14 +69,14 @@ public class BackPackService {
      * @return 背包数据
      */
     public String queryBackPackDataByPlayerUUID(String playerUUID){
-        BufferStatement bufferStatement = new BufferStatement("select `backpacks` from backpack_player_data where player_uuid = ?", playerUUID);
 
         PreparedStatement ps = null;
         ResultSet rs = null;
         Connection connection = null;
         try {
             connection = sqlBase.getConnection();
-            ps = bufferStatement.preparedStatement(connection);
+            ps = connection.prepareStatement("select `backpacks` from backpack_player_data where player_uuid = ?");
+            ps.setString(1,playerUUID);
             rs = ps.executeQuery();
             if(rs.next()){
                 return rs.getString(1);

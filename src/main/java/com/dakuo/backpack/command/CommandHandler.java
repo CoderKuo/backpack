@@ -23,8 +23,8 @@ public class CommandHandler implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(label.equalsIgnoreCase("bp") && sender instanceof Player && args.length == 0){
-            menuInventory menuInventory = new menuInventory();
-            menuInventory.OpenInventory((Player) sender);
+            menuInventory menuInventory = new menuInventory((Player) sender);
+            menuInventory.OpenInventory();
             return true;
         }
 
