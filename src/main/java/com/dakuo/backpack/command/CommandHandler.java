@@ -1,6 +1,6 @@
 package com.dakuo.backpack.command;
 
-import com.dakuo.backpack.inventory.menuInventory;
+import com.dakuo.backpack.inventory.MenuInventory;
 import com.dakuo.backpack.service.BackPackService;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,7 +23,7 @@ public class CommandHandler implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(label.equalsIgnoreCase("bp") && sender instanceof Player && args.length == 0){
-            menuInventory menuInventory = new menuInventory((Player) sender);
+            MenuInventory menuInventory = new MenuInventory((Player) sender);
             menuInventory.OpenInventory();
             return true;
         }

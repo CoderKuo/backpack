@@ -5,6 +5,7 @@ import com.dakuo.backpack.database.BufferStatement;
 import com.dakuo.backpack.database.MysqlBase;
 import com.dakuo.backpack.database.SQLiteBase;
 import com.dakuo.backpack.database.SqlBase;
+import com.dakuo.backpack.inventory.BackPackInventoryMonitor;
 import com.dakuo.backpack.inventory.MenuInventoryMonitor;
 import com.dakuo.backpack.service.DataBaseService;
 import com.dakuo.backpack.service.version;
@@ -66,6 +67,7 @@ public final class Backpack extends JavaPlugin {
 
             this.getCommand("bp").setExecutor(CommandHandler.getInstance());
             getServer().getPluginManager().registerEvents(new MenuInventoryMonitor(), this);
+            getServer().getPluginManager().registerEvents(new BackPackInventoryMonitor(), this);
 
 
         }

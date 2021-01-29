@@ -31,9 +31,52 @@ public class InventoryService {
         return instance;
     }
 
-//    public List<ItemStack> showBackPackContent(String backpack,String uuid,int index){
-//
-//    }
+
+    public void updateBackPackContent(int id,String content){
+        BufferStatement bufferStatement = new BufferStatement("update `backpack_data` set content = ? where id = ?",content,id);
+        sqlBase.queue(bufferStatement);
+        sqlBase.flush();
+    }
+
+    public String getBackPackContentById(int id){
+        BufferStatement bufferStatement = new BufferStatement("select `content` from backpack_data where id = ?", id);
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection connection = null;
+        try {
+            connection = sqlBase.getConnection();
+            ps = bufferStatement.preparedStatement(connection);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getString(1);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            sqlBase.close(rs,ps,connection);
+        }
+        return null;
+    }
+
+    public String getBackPackTypeById(int id){
+        BufferStatement bufferStatement = new BufferStatement("select `backpackType` from backpack_data where id = ?", id);
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection connection = null;
+        try {
+            connection = sqlBase.getConnection();
+            ps = bufferStatement.preparedStatement(connection);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getString(1);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            sqlBase.close(rs,ps,connection);
+        }
+        return null;
+    }
 
     public List<ItemStack> showBackItemStacks(List<BackPackEntity> BackPackList){
         List<ItemStack> itemStacks = new ArrayList<>();
@@ -58,6 +101,9 @@ public class InventoryService {
             itemMeta.setDisplayName(backPackYamlEntity.getName());
             List<String> lore = backPackYamlEntity.getDescription();
             itemMeta.setLore(lore);
+            List<String> lore1 = itemMeta.getLore();
+            lore1.add("§8背包ID:"+backPackEntity.id);
+            itemMeta.setLore(lore1);
             itemStack.setItemMeta(itemMeta);
             itemStacks.add(itemStack);
         }

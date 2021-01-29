@@ -30,5 +30,4 @@ public class InventoryPage {
         return list.subList(firstIndex,lastIndex);
     }
 
-
 }

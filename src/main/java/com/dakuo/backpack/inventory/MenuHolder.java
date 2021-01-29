@@ -19,11 +19,11 @@ public class MenuHolder implements InventoryHolder {
     Player player;
     InventoryService inventoryService;
     InventoryPage inventoryPage;
-    menuInventory menuInventory;
+    MenuInventory menuInventory;
     List<BackPackEntity> BackPackList = new ArrayList<>();
     List<ItemStack> itemStacks = new ArrayList<>();
 
-    public MenuHolder(Player player,menuInventory menuInventory){
+    public MenuHolder(Player player, MenuInventory menuInventory){
         inventoryService = InventoryService.getInstance();
         this.menuInventory = menuInventory;
         this.player = player;
@@ -32,6 +32,7 @@ public class MenuHolder implements InventoryHolder {
         inventoryPage = new InventoryPage(28,itemStacks);
         index = 1;
     }
+
 
     public List<ItemStack> getItemStackByIndex(){
         return inventoryPage.getItemStack(index);
